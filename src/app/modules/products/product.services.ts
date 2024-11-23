@@ -23,25 +23,27 @@ const getAllProductToDB = async (searchTerm?: string) => {
 
 const getProductById=async(id: string)=>{
     const result=await ProductModel.findById(id);
-    
+
     return result
 }
-const updatedProduct =async(id: string, productData: Partial<Iproduct>)=>{
- const result =await ProductModel.findByIdAndUpdate(id, productData, { new: true })
- return result
-}
-
-const deletedProduct=async(id:string)=>{
-const result =await ProductModel.findByIdAndDelete(id)
-return result
-}
 
 
+const updatedProduct = async (id: string, productData: Partial<Iproduct>) => {
+  const result = await ProductModel.findByIdAndUpdate(id, productData, {
+    new: true,
+  });
+  return result;
+};
+
+const deletedProduct = async (id: string) => {
+  const result = await ProductModel.findByIdAndDelete(id);
+  return result;
+};
 
 export const ProductServices = {
   addProductInToDB,
   getAllProductToDB,
   getProductById,
   updatedProduct,
-  deletedProduct
+  deletedProduct,
 };

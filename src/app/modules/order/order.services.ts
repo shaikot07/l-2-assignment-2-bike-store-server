@@ -1,25 +1,25 @@
-import { error } from 'console';
+
 import { ProductModel } from '../products/product.model';
 import { OrderModel } from './order.model';
 
-const createOrderInToDB = async (orderData) => {
+const createOrderInToDB = async (orderData:any) => {
   const { email, product, quantity, totalPrice } = orderData;
   const productData = await ProductModel.findById(product);
 
   if (!productData) {
-    throw new Error('Product not found');
+    throw new Error('product not found');
   }
   //  check stock
 
   if (productData.quantity < quantity) {
-    throw new Error('Insufficient stock available');
+    throw new Error('insufficient stock available');
   }
 
   //   calculate the total price and check  user send total price = correctTotalPrice
   const correctTotalPrice = productData?.price * quantity;
 
   if (totalPrice !== correctTotalPrice) {
-    throw new Error(`Incorrect totalPrice. Expected: ${correctTotalPrice}`);
+    throw new Error(`incorrect totalPrice. expected: ${correctTotalPrice}`);
   }
 
   //   reduce stock in db

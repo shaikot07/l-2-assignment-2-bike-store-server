@@ -5,7 +5,7 @@ const router =express.Router()
 // api ai route here 
 
 // router.post('/create-product',StudentControllers.createStudent);
-router.post('/create-product',ProductControllers.createProduct);
+router.post('/',ProductControllers.createProduct);
 router.get('/',ProductControllers.getAllProducts)
 router.get('/:id', ProductControllers.getProductById);
 router.put('/:id', ProductControllers.updatedVProduct);
