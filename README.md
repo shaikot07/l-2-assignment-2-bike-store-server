@@ -37,8 +37,9 @@ The **Bike Store Server** is a robust RESTful API built with **Node.js**, **Expr
 
 ### Step 1: Clone the Repository 🗂️
 Run the following commands in your terminal:
+
 git clone <repository-url>
-cd <repository-folder>
+
 
 ---
 ### Step 2: Install Dependencies 📦
