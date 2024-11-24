@@ -2,6 +2,7 @@
 import { ProductModel } from '../products/product.model';
 import { OrderModel } from './order.model';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createOrderInToDB = async (orderData:any) => {
   const { email, product, quantity, totalPrice } = orderData;
   const productData = await ProductModel.findById(product);

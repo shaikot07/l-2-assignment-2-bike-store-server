@@ -1,94 +1,89 @@
-# l-2-assignment-2-bike-store-server
+# 🚴‍♂️ Bike Store Server - Assignment 2
 
-## Project Overview
+## 📋 Project Overview
 
-The **l-2-assignment-2-bike-store-server** is a comprehensive RESTful API designed to manage bike inventory. Built with **Node.js**, **Express**,**Mongoose**,and **Typescript**,.
-
----
-
-## Features
-
-### Bike  Management
-
-- Add, update, delete, and retrieve Bike information.
-- Handle Bike  details like brand, model, price, stock quantity, and category.
-
-### Order Processing
-
-- Place customer orders by selecting  Bike and specifying quantities.
-- Validate the correctness of total price (price × quantity).
-- Prevent orders for out-of-stock Bike.
-
-### Revenue Calculation
-
-- Calculate the total revenue generated from created orders.
-
-### Data Validation
-
-- validation by mongoose Schema  and it check it all incoming data are valid datatype.
+The **Bike Store Server** is a robust RESTful API built with **Node.js**, **Express**, **Mongoose**, and **TypeScript**. It is designed to efficiently manage bike inventory, orders, and revenue.
 
 ---
 
-## Technologies Used
+## ✨ Features
 
-- **Node.js**
-- **Express**
-- **Mongoose**
-- **TypeScript**
+### 1. **Bike Management** 🚲
+- ➕ Add, 🛠️ update, ❌ delete, and 🔍 retrieve bike details.
+- Manage attributes such as 🏷️ brand, 📋 model, 💰 price, 📦 stock quantity, and 🗂️ category.
+
+### 2. **Order Processing** 🛒
+- 📦 Place customer orders by selecting bikes and specifying quantities.
+- ✅ Automatically validate total price (💲price × 🔢 quantity).
+- 🚫 Prevent orders for bikes that are out of stock.
+
+### 3. **Revenue Calculation** 💵
+- 📈 Compute the total revenue from completed orders.
+
+### 4. **Data Validation** ✔️
+- Ensure the validity of all incoming data using **Mongoose** schemas.
 
 ---
 
-## How to run the project locally
+## 🛠️ Technologies Used
+- **Node.js** 🟩
+- **Express** 🚀
+- **Mongoose** 📚
+- **TypeScript** 📝
 
-STEP 1: **Clone the Repository**
+---
 
+## 🖥️ Running the Project Locally
+
+### Step 1: Clone the Repository 🗂️
+Run the following commands in your terminal:
 ```bash
-   git clone <repository-url>
-   cd <repository-folder>
-```
+git clone <repository-url>
+cd <repository-folder>
 
-STEP 2: **Install all package which helps to run the project**
+npm install
+Step 2: Install Dependencies 📦
+Install the required packages with:
 
-```
-    npm install
-```
+bash
+Copy code
+npm install
+Step 3: Configure Environment Variables ⚙️
+Create a .env file in the root directory and add the following configuration:
 
-STEP 3: **Create a .env file in the project root and add the following variables**
+env
+Copy code
+PORT=5000
+DATABASE_URL=YOUR_DATABASE_URL
+Step 4: Start the Server 🚀
+Start the development server with:
 
-```
-    PORT=5000
-    DATABASE_URL=YOUR_DATABASE_URL
+bash
+Copy code
+npm run dev
+The server will run on the port specified in your .env file.
 
-```
+📡 API Endpoints
+1. Bikes 🚲
+Method	Endpoint	Description
+📥 GET	/api/products	Retrieve all bikes in inventory
+➕ POST	/api/products	Add a new bike to the inventory
+🔍 GET	/api/products/:id	Retrieve details of a specific bike
+🛠️ PUT	/api/products/:id	Update details of a specific bike
+❌ DELETE	/api/products/:id	Remove a bike from the inventory
+2. Orders 🛒
+Method	Endpoint	Description
+➕ POST	/api/orders	Place a new order
+📊 GET	/api/orders/revenue	Retrieve total revenue from all orders
 
-STEP 4: **Start the server with the following command**
 
-```
-    npm run dev
 
-```
+🖊️ Credits
+Developed by: SAIFUL ISLAM SHAIKOT 🎉
 
-**The project should run on the port you set locally on your .env file.**
 
----
 
-## API Endpoints
 
-### Bikes
 
-| Method | Endpoint        | Description                     |
-| ------ | --------------- | ------------------------------- |
-| GET    | `/api/products`     | Get all Bikes in the inventory   |
-| POST   | `/api/products`     | Add a new Bike to the inventory  |
-| GET    | `/api/products/:id` | Get details of a specific Bike   |
-| PUT    | `/api/products/:id` | Update Bike details              |
-| DELETE | `/api/products/:id` | Delete a Bike from the inventory |
 
----
 
-### Orders
-
-| Method | Endpoint              | Description                   |
-| ------ | --------------------- | ----------------------------- |
-| POST   | `/api/orders`         | Place a new order             |
-| GET    | `/api/orders/revenue` | Get total revenue from orders |
