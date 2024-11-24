@@ -45,21 +45,19 @@ npm install
 Step 2: Install Dependencies 📦
 Install the required packages with:
 
-bash
-Copy code
+
 npm install
 Step 3: Configure Environment Variables ⚙️
 Create a .env file in the root directory and add the following configuration:
 
 env
-Copy code
+
 PORT=5000
 DATABASE_URL=YOUR_DATABASE_URL
 Step 4: Start the Server 🚀
 Start the development server with:
 
-bash
-Copy code
+
 npm run dev
 The server will run on the port specified in your .env file.
 
@@ -71,6 +69,7 @@ Method	Endpoint	Description
 🔍 GET	/api/products/:id	Retrieve details of a specific bike
 🛠️ PUT	/api/products/:id	Update details of a specific bike
 ❌ DELETE	/api/products/:id	Remove a bike from the inventory
+
 2. Orders 🛒
 Method	Endpoint	Description
 ➕ POST	/api/orders	Place a new order
