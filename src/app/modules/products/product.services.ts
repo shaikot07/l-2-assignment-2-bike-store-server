@@ -9,7 +9,7 @@ const addProductInToDB = async (product: Iproduct) => {
 const getAllProductToDB = async (searchTerm?: string) => {
   const query = searchTerm
     ? {
-        // use $or for match any field name, brand, category. RexExp for case-insensitive search .
+        // use $or for match any field name, brand, category. and RexExp for case-insensitive search
         $or: [
           { name: new RegExp(searchTerm, 'i') },
           { brand: new RegExp(searchTerm, 'i') },
@@ -18,15 +18,19 @@ const getAllProductToDB = async (searchTerm?: string) => {
       }
     : {};
   const result = await ProductModel.find(query);
+
+  if (result.length === 0) {
+    return 'no matches found';
+  }
+
   return result;
 };
 
-const getProductById=async(id: string)=>{
-    const result=await ProductModel.findById(id);
+const getProductById = async (id: string) => {
+  const result = await ProductModel.findById(id);
 
-    return result
-}
-
+  return result;
+};
 
 const updatedProduct = async (id: string, productData: Partial<Iproduct>) => {
   const result = await ProductModel.findByIdAndUpdate(id, productData, {

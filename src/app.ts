@@ -18,17 +18,17 @@ app.use('/api/orders', OrderRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Its ready to be get API end point services !!');
+  res.send('its ready to be get API end point services !!');
 });
 
 // global error handler 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-unused-vars, @typescript-eslint/no-unused-vars
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  console.error('Global Error Handler:', error);
-  // Send a response with the error details
+  console.error('global error handler:', error);
+  // send a response with the error details
   res.status(error.status || 500).json({
     success: error.success !== undefined ? error.success : false,
-    message: error.message || 'Something went wrong',
+    message: error.message || 'something went wrong',
     stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
   });
 });
