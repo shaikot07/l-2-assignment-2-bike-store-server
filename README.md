@@ -37,45 +37,53 @@ The **Bike Store Server** is a robust RESTful API built with **Node.js**, **Expr
 
 ### Step 1: Clone the Repository 🗂️
 Run the following commands in your terminal:
-```bash
 git clone <repository-url>
 cd <repository-folder>
 
-npm install
-Step 2: Install Dependencies 📦
+---
+### Step 2: Install Dependencies 📦
 Install the required packages with:
-
-
 npm install
-Step 3: Configure Environment Variables ⚙️
+---
+
+### Step 3: Configure Environment Variables ⚙️
 Create a .env file in the root directory and add the following configuration:
 
-env
 
 PORT=5000
-DATABASE_URL=YOUR_DATABASE_URL
-Step 4: Start the Server 🚀
-Start the development server with:
 
+DATABASE_URL=YOUR_DATABASE_URL
+
+---
+### Step 4: Start the Server 🚀
+Start the development server with:
 
 npm run dev
 The server will run on the port specified in your .env file.
 
-📡 API Endpoints
-1. Bikes 🚲
-Method	Endpoint	Description
-📥 GET	/api/products	Retrieve all bikes in inventory
-➕ POST	/api/products	Add a new bike to the inventory
-🔍 GET	/api/products/:id	Retrieve details of a specific bike
-🛠️ PUT	/api/products/:id	Update details of a specific bike
-❌ DELETE	/api/products/:id	Remove a bike from the inventory
 
-2. Orders 🛒
-Method	Endpoint	Description
-➕ POST	/api/orders	Place a new order
-📊 GET	/api/orders/revenue	Retrieve total revenue from all orders
+## 📡 API Endpoints
+
+### 1. **Bikes** 🚲
+
+| 🛠️ Action        | 📍 Endpoint          | 📋 Description                           |
+|-------------------|---------------------|------------------------------------------|
+| 📥 **GET**       | `/api/products`     | Retrieve all bikes in inventory          |
+| ➕ **POST**      | `/api/products`     | Add a new bike to the inventory          |
+| 🔍 **GET**       | `/api/products/:id` | Retrieve details of a specific bike      |
+| 🛠️ **PUT**       | `/api/products/:id` | Update details of a specific bike        |
+| ❌ **DELETE**    | `/api/products/:id` | Remove a bike from the inventory         |
+
+### 2. **Orders** 🛒
+
+| 🛠️ Method   | 📍 Endpoint          | 📋 Description                           |
+|-------------|---------------------|------------------------------------------|
+| ➕ **POST** | `/api/orders`       | Place a new order                        |
+| 📊 **GET**  | `/api/orders/revenue` | Retrieve total revenue from all orders   |
 
 
 
-🖊️ Credits
-Developed by: SAIFUL ISLAM SHAIKOT 🎉
+## 🖊️ **Credits**
+
+Developed with ❤️ by:  
+**[Saiful Islam Shaikot](#)** 🎉
