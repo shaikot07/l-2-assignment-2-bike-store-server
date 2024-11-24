@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The **l-2-assignment-2-bike-store-server** is a comprehensive RESTful API designed to manage bike inventory. Built with **Node.js**, **Express**,**Mongoose**,and **Typescript**,.
+The **l-2-assignment-2-bike-store-server** is a comprehensive REST fuli API designed to manage bike inventory. Built with **Node.js**, **Express**,**Mongoose**,and **Typescript**,.
 
 ---
 
