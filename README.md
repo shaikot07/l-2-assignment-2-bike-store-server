@@ -1,8 +1,8 @@
-# 🚴‍♂️ Bike Store Server - Assignment 2
+# 🚴‍♂️ l-2-assignment-2-bike-store-server
 
 ## 📋 Project Overview
 
-The **Bike Store Server** is a robust RESTful API built with **Node.js**, **Express**, **Mongoose**, and **TypeScript**. It is designed to efficiently manage bike inventory, orders, and revenue.
+The **l-2-assignment-2-bike-store-server** is a robust RESTful API built with  **Node.js**, **Express**, **Mongoose**, and **TypeScript**. It is designed to efficiently manage bike inventory, orders, and revenue.
 
 ---
 
