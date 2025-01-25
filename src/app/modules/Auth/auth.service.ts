@@ -51,6 +51,7 @@ const loginUser = async (payload: TLoginUser) => {
   const jwtPayload = {
     userId: user._id.toString(),
     role: user.role,
+    email: user.email,
   };
 
   const token = createToken(
@@ -58,9 +59,10 @@ const loginUser = async (payload: TLoginUser) => {
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string,
   );
-
+  console.log("create token::",token);
   return {
     token,
+    
   };
 };
 

@@ -1,9 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { OrderServices } from './order.services';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from 'http-status';
 
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = req.body;
+    console.log(order);
     const result = await OrderServices.createOrderInToDB(order);
     res.status(201).json({
       message: 'Order created successfully',
@@ -25,6 +29,22 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
+
+const getUserOrders = catchAsync(async (req, res) => {
+  console.log("this is order controller", req.user.email);
+  const email = req.user.email;
+  const result = await OrderServices.getUserOrdersFromDB(email)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'order! retrieved successfully',
+    data: result,
+  });
+});
+
+
+
 // get Revenue
 const getRevenueData = async (req: Request, res: Response,next:NextFunction) => {
   try {
@@ -43,5 +63,6 @@ const getRevenueData = async (req: Request, res: Response,next:NextFunction) => 
 
 export const OrderControllers = {
   createOrder,
+  getUserOrders,
   getRevenueData,
 };
