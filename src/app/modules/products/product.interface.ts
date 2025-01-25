@@ -3,7 +3,9 @@
 export interface Iproduct {
   name: string;
   brand: string;
+  model:string,
   price: number;
+  productImg?:string,
   category: 'Mountain' | 'Road' | 'Hybrid' | 'Electric';
   description:string;
   quantity :number;
