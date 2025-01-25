@@ -13,8 +13,8 @@ class QueryBuilder<T> {
     // const searchTerm = this?.query?.searchTerm;
     const searchTerm = this?.query?.search || this?.query?.searchTerm;
     // console.log("thiss",this.query);
-    // console.log("search term:", searchTerm); 
-    // console.log("searchable fields:", searchableFields); 
+    // console.log("search term:", searchTerm);
+    // console.log("searchable fields:", searchableFields);
     if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
         $or: searchableFields.map(
@@ -31,24 +31,29 @@ class QueryBuilder<T> {
 
   filter() {
     const queryObj = { ...this.query };
-    // console.log("constructed query object:", queryObj);
+    console.log('constructed query object:', queryObj);
 
     // Filtering
-    const excludeFields = ['filter','search','sortBy','sortOrder','author','searchTerm', 'sort', 'limit', 'page', 'fields']; //ignore korar jonno akhane add korte hbe
+    const excludeFields = ['category','search','sortBy','sortOrder','author','searchTerm','sort','limit','page','fields',
+    ]; //ignore korar jonno akhane add korte hbe
+
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    if (this.query.author) {
-      queryObj['author'] = this.query.filter;
-      
+    if (queryObj.filter) {
+      queryObj['category'] = queryObj.filter;
+      delete queryObj.filter;
     }
-    // console.log("final query object filter mapping filter:", queryObj)
+    
+    // console.log("final query object filter", queryObj)
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
 
     return this;
-  }   
+  }
 
   //   sort method  sort by specific fields and order
-  sort() {
+
+  //   sort method
+   sort() {
     const sortBy = (this.query.sortBy as string) || 'createdAt';
     const sortOrder =
       (this.query.sortOrder as string)?.toLowerCase() === 'asc' ? '' : '-';
@@ -56,12 +61,39 @@ class QueryBuilder<T> {
     return this;
   }
 
+
+  //   pagination method
+  paginate() {
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    this.modelQuery = this.modelQuery.skip(skip).limit(limit);
+
+    return this;
+  }
+
+  //   fields filtaring
   fields() {
     const fields =
       (this?.query?.fields as string)?.split(',')?.join(' ') || '-__v';
 
     this.modelQuery = this.modelQuery.select(fields);
     return this;
+  }
+  async countTotal() {
+    const totalQueries = this.modelQuery.getFilter();
+    const total = await this.modelQuery.model.countDocuments(totalQueries);
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 10;
+    const totalPage = Math.ceil(total / limit);
+
+    return {
+      page,
+      limit,
+      total,
+      totalPage,
+    };
   }
 }
 

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import { ProductServices } from './product.services';
+import sendResponse from '../../utils/sendResponse';
+import catchAsync from '../../utils/catchAsync';
+import httpStatus from 'http-status';
 
 const createProduct = async (
   req: Request,
@@ -26,30 +29,35 @@ const createProduct = async (
 };
 
 // get all product
-const getAllProducts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const searchTerm = req.query.searchTerm as string;
-    const products = await ProductServices.getAllProductToDB(searchTerm);
-    res.status(200).json({
-      success: true,
-      message: 'bike is retrieved successfully',
-      data: products,
-    });
-  } catch (error) {
-    // res.status(500).json({ message: 'Server error', success: false, error });
-    next(error);
-  }
-};
+// const getAllProducts = async (req: Request,res: Response, next: NextFunction,) => {
+//   try {
+//     const searchTerm = req.query.searchTerm as string;
+//     const products = await ProductServices.getAllProductToDB(searchTerm);
+//     res.status(200).json({
+//       success: true,
+//       message: 'bike is retrieved successfully',
+//       data: products,
+//     });
+//   } catch (error) {
+//     // res.status(500).json({ message: 'Server error', success: false, error });
+//     next(error);
+//   }
+// };
+
+const getAllProducts  = catchAsync(async (req: Request,res: Response, ) => {
+  console.log(req.query);
+  // const result = await BlogServices.getAllBlogs(req.query);
+  const result =await ProductServices.getAllProductToDB(req.query)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'blog are retrieved successfully',
+    data: result,
+  });
+});
 // get single product by id
-const getProductById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
+const getProductById = async (req: Request,res: Response, next: NextFunction,): Promise<void> => {
   try {
     const productId = req.params.id;
     const product = await ProductServices.getProductById(productId);
@@ -76,11 +84,7 @@ const getProductById = async (
 };
 
 // updated single product by id
-const updatedVProduct = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
+const updatedVProduct = async ( req: Request,res: Response,next: NextFunction,): Promise<void> => {
   try {
     const productId = req.params.id;
     const productData = req.body;

@@ -1,3 +1,5 @@
+import QueryBuilder from '../../builder/QueryBuilder';
+import { ProductSearchableFields } from './product.constant';
 import { Iproduct } from './product.interface';
 import { ProductModel } from './product.model';
 
@@ -6,22 +8,20 @@ const addProductInToDB = async (product: Iproduct) => {
   return result;
 };
 
-const getAllProductToDB = async (searchTerm?: string) => {
-  const query = searchTerm
-    ? {
-        // use $or for match any field name, brand, category. and RexExp for case-insensitive search
-        $or: [
-          { name: new RegExp(searchTerm, 'i') },
-          { brand: new RegExp(searchTerm, 'i') },
-          { category: new RegExp(searchTerm, 'i') },
-        ],
-      }
-    : {};
-  const result = await ProductModel.find(query);
+const  getAllProductToDB = async (query: Record<string, unknown>) => {
+  console.log(query);
+  const productQuery = new QueryBuilder(
+    ProductModel.find(),
+    query,
+  )
+    .search(ProductSearchableFields)
+    .filter()
+    .sort()
+    .fields()
+    .paginate()
 
-  if (result.length === 0) {
-    return 'no matches found';
-  }
+  const result = await  productQuery.modelQuery.exec();
+  console.log('Query Result:', result);
 
   return result;
 };
