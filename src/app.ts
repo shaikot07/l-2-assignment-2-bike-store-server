@@ -1,35 +1,39 @@
-// const express = require('express')
-import express, { Application,  NextFunction,  Request, Response } from 'express';
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { ProductRoutes } from './app/modules/products/product.route';
-import { OrderRoutes } from './app/modules/order/order.router';
+import express, { Application, Request, Response } from 'express';
+import globalErrorHandler from './app/middlewares/globalErrorhandler';
+import notFound from './app/middlewares/notFound';
+import router from './app/routes';
 
 const app: Application = express();
-// const port = 3000;
 
-// parsers
+//parsers
 app.use(express.json());
+app.use(cookieParser());
+// app.use(cors({ origin: ['http://localhost:5173'] }));
 app.use(cors());
 
+
 // application routes
-app.use('/api/products', ProductRoutes);
-app.use('/api/orders', OrderRoutes);
+app.use('/api', router);  //index.ts  theke asbe oi khabe route gula foreach kora ache
+// app.use(); comment kora thakbe
+
+// const test = (req: Request, res: Response) => {
+//   const a = 10;
+//   res.send(a);
+// };
 
 
+app.use(globalErrorHandler);
 
+//Not Found
+app.use(notFound);
 app.get('/', (req: Request, res: Response) => {
-  res.send('its ready to be get API end point services !!');
+  res.send('Hello World!');
 });
 
-// global error handler 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, no-unused-vars, @typescript-eslint/no-unused-vars
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  console.error('global error handler:', error);
-  // send a response with the error details
-  res.status(error.status || 500).json({
-    success: error.success !== undefined ? error.success : false,
-    message: error.message || 'something went wrong',
-    stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-  });
-});
 export default app;
