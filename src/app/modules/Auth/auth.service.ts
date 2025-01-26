@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import config from '../../config';
 import AppError from '../../errors/AppError';
 import { TLoginUser } from './auth.interface';
-import { createToken } from './auth.utils';
+import { createToken, verifyToken } from './auth.utils';
 import { User } from '../user/user.model';
 import { TUser } from '../user/user.interface';
 
@@ -61,18 +61,69 @@ const loginUser = async (payload: TLoginUser) => {
   );
   console.log("create token::",token);
 
-  
-
-   // Save refresh token in the database (or send it in a secure HTTP-only cookie)
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string,
+  );
   
   return {
     token,
+    refreshToken
    
     
   };
+
 };
+
+const refreshToken = async (token: string) => {
+  // checking if the given token is valid
+  const decoded = verifyToken(token, config.jwt_refresh_secret as string);
+
+  const { userId, iat } = decoded;
+
+  // checking if the user is exist
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+  }
+  // checking if the user is already deleted
+  const isDeleted = user?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
+  }
+
+  // checking if the user is blocked
+  // const userStatus = user?.status;
+
+  // if (userStatus === 'blocked') {
+  //   throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
+  // }
+
+  
+
+  const jwtPayload = {
+    userId: user._id.toString(),
+    role: user.role,
+    email: user.email,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
+
+  return {
+    accessToken,
+  };
+};
+
 
 export const AuthServices = {
   registerUser,
   loginUser,
+  refreshToken
 };
