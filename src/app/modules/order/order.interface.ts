@@ -7,5 +7,5 @@ export interface IOrder{
     product:string;
     quantity:number;
     totalPrice:number;
-    status: 'pending' | 'completed' | 'cancelled';
+    status: 'pending' | 'completed' | 'cancelled' |'shipped' |'delivered'|'canceled' ;
 }

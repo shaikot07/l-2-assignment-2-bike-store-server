@@ -43,6 +43,59 @@ const getUserOrders = catchAsync(async (req, res) => {
   });
 });
 
+// for admin 
+const getAllOrders = catchAsync(async (req: Request, res: Response) => {
+  const result = await OrderServices.getAllOrdersFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All orders retrieved successfully',
+    data: result,
+  });
+});
+
+
+// get order by id 
+const getOrderById = catchAsync(async (req: Request, res: Response) => {
+  const orderId = req.params.id;
+  console.log(orderId);
+  const result = await OrderServices.getOrderByIdFromDB(orderId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order retrieved successfully',
+    data: result,
+  });
+});
+
+// user cancel Order 
+const cancelOrder = catchAsync(async (req: Request, res: Response) => {
+  console.log('Cancel order request from:', req.user.email);
+  const email = req.user.email;
+  const result = await OrderServices.cancelOrderInDB(req.params.orderId, email);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order canceled successfully',
+    data: result,
+  });
+});
+
+// admin updated  statust 
+const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+  const { status } = req.body;
+  const result = await OrderServices.updateOrderStatusInDB(req.params.orderId, status);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order status updated successfully',
+    data: result,
+  });
+});
 
 
 // get Revenue
@@ -64,5 +117,9 @@ const getRevenueData = async (req: Request, res: Response,next:NextFunction) => 
 export const OrderControllers = {
   createOrder,
   getUserOrders,
+  getAllOrders,
+  getOrderById,
+  cancelOrder,
+  updateOrderStatus,
   getRevenueData,
 };

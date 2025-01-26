@@ -89,36 +89,108 @@ const createOrderInToDB = async (orderData: any) => {
   }
 };
 
+// get user spesick order 
 const getUserOrdersFromDB = async (email: string) => {
   return await OrderModel.find({ email })
     .populate('product', 'name price')
     .sort({ createdAt: -1 });
 };
+
+
+  // get all orders only for admin
+
+const getAllOrdersFromDB = async () => {
+  const result = await OrderModel.find()
+    .populate('product', 'name price')
+    .sort({ createdAt: -1 });
+
+    if (!result || result.length === 0) {
+      throw new AppError(httpStatus.OK, 'No orders  available');
+  }
+    return result
+};
+
+
+
+//  get a single order by ID 
+const getOrderByIdFromDB = async (orderId: string) => {
+  const order = await OrderModel.findById(orderId).populate('product', 'name price');
+  if (!order)  throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+ 
+  return order;
+};
+
+
+/**
+ * Cancel an order (User can cancel only pending orders)
+ * @param orderId - Order ID
+ * @param email - User email
+ */
+const cancelOrderInDB = async (orderId: string, email: string) => {
+  const order = await OrderModel.findOne({ _id: orderId, email });
+
+  if (!order) throw new AppError(httpStatus.NOT_FOUND, 'Order not found or unauthorized');
+  
+
+  if (order.status === 'shipped' || order.status === 'delivered') {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Cannot cancel shipped or delivered orders');
+    
+  }
+
+  // restore product stock
+  const productData = await ProductModel.findById(order.product);
+  if (productData) {
+    productData.quantity += order.quantity;
+    productData.inStock = true;
+    await productData.save();
+  }
+
+  order.status = 'canceled';
+  await order.save();
+  return order;
+};
+
+
+
+/**
+ * Update order status (Admin only)
+ * @param orderId - Order ID
+ * @param status - New status (pending, shipped, delivered, canceled)
+ */
+const updateOrderStatusInDB = async (orderId: string, status: 'pending' | 'shipped' | 'delivered' | 'canceled') => {
+  const order = await OrderModel.findById(orderId);
+  if (!order) throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+  
+
+  order.status = status;
+  await order.save();
+  return order;
+};
+
+
+
+
 // Calculate Revenue from Orders using Aggregation
-
-
-
-
-
-
-
 const calculateRevenue=async()=>{
-    const result =await OrderModel.aggregate([
-        {
-            $group:{
-                _id:null,
-                totalRevenue:{$sum:"$totalPrice"}
-            }
-        }
-    ])
-    return result[0]?.totalRevenue || 0;
+  const result =await OrderModel.aggregate([
+      {
+          $group:{
+              _id:null,
+              totalRevenue:{$sum:"$totalPrice"}
+          }
+      }
+  ])
+  return result[0]?.totalRevenue || 0;
 }
-
 
 
 
 export const OrderServices = {
   createOrderInToDB,
   getUserOrdersFromDB,
+  getAllOrdersFromDB,
+  getOrderByIdFromDB,
+  cancelOrderInDB,
+  updateOrderStatusInDB,
   calculateRevenue
 };
