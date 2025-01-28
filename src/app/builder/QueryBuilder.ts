@@ -29,31 +29,86 @@ class QueryBuilder<T> {
     return this;
   }
 
+ /*
+ Developer note
+ 1.nicer filter ta akta ta field ar opor kj korbe 
+
+*/
+// ----------------------------
+  // filter() {
+  //   const queryObj = { ...this.query };
+  //   console.log('constructed query object:', queryObj);
+
+  //   // Filtering
+  //   const excludeFields = ['category','search','sortBy','sortOrder','author','searchTerm','sort','limit','page','fields',
+  //   ]; //ignore korar jonno akhane add korte hbe
+
+  //   excludeFields.forEach((el) => delete queryObj[el]);
+
+  //   if (queryObj.filter) {
+  //     queryObj['category'] = queryObj.filter;
+  //     delete queryObj.filter;
+  //   }
+  //   // console.log("final query object filter", queryObj)
+  //   this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+
+  //   return this;
+  // }
+
+  // -----------------------
+ /*
+ Developer note
+ 1.nicer filter ta dui ta field ar opor kj korbe 
+  2.field baraite caile 
+
+*/
   filter() {
     const queryObj = { ...this.query };
     console.log('constructed query object:', queryObj);
-
-    // Filtering
-    const excludeFields = ['category','search','sortBy','sortOrder','author','searchTerm','sort','limit','page','fields',
-    ]; //ignore korar jonno akhane add korte hbe
-
+  
+    // Fields to exclude from filtering
+    const excludeFields = [
+      'search', 'sortBy', 'sortOrder', 'author', 'searchTerm', 'sort', 'limit', 'page', 'fields',
+    ];
     excludeFields.forEach((el) => delete queryObj[el]);
-
+  
+    const filters: Record<string, unknown> = {};
+  
+    // Handle filter as an array or an single value
     if (queryObj.filter) {
-      queryObj['category'] = queryObj.filter;
-      delete queryObj.filter;
+      const filterValues = Array.isArray(queryObj.filter)
+        ? queryObj.filter
+        : [queryObj.filter]; // normalize single value to an array
+  
+      filterValues.forEach((value) => {
+        if (typeof value === 'string') {
+          if (value.toLowerCase() === 'instock') {
+            filters['inStock'] = true; // Handle `instock filter db te thakte hbe
+          } else {
+            filters['category'] = value; // hondle category filter
+          }
+        }
+      });
+  
+      delete queryObj.filter; // clean up `filter` field
     }
-    
-    // console.log("final query object filter", queryObj)
-    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
-
+  
+    // add remaining fields to filters
+    Object.assign(filters, queryObj);
+  
+    console.log('Final filters for query:', filters);
+  
+    // Apply filters to the MongoDB query
+    this.modelQuery = this.modelQuery.find(filters as FilterQuery<T>);
     return this;
   }
+  
+  
+  
 
-  //   sort method  sort by specific fields and order
 
-  //   sort method
-   sort() {
+
+  sort() {
     const sortBy = (this.query.sortBy as string) || 'createdAt';
     const sortOrder =
       (this.query.sortOrder as string)?.toLowerCase() === 'asc' ? '' : '-';
@@ -65,7 +120,7 @@ class QueryBuilder<T> {
   //   pagination method
   paginate() {
     const page = Number(this?.query?.page) || 1;
-    const limit = Number(this?.query?.limit) || 10;
+    const limit = Number(this?.query?.limit) || 20;
     const skip = (page - 1) * limit;
 
     this.modelQuery = this.modelQuery.skip(skip).limit(limit);

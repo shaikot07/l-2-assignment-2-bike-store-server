@@ -10,7 +10,7 @@ const productSchema = new Schema({
   category: {
     type: String,
     required: true,
-    enum: ['Mountain', 'Road', 'Hybrid', 'Electric'],
+    enum: ['Mountain', 'Road', 'Hybrid', 'Electric','Gravel'],
   },
   description: { type: String, required: true },
   quantity: { type: Number, required: true, min: 0 },
