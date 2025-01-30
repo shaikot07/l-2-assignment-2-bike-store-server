@@ -31,10 +31,11 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const verifyPayment = catchAsync(async (req, res) => {
-  const orderId = req.query.order_id as string;
-  console.log("test ver",orderId);
-  const result = await OrderServices.verifyPayment(req.query.orderId as string);
-console.log("hellll");
+//  console.log("hi");
+//  console.log("order id from controller", req.query as string);
+//  const result = await OrderServices.verifyPayment()
+
+ const result = await OrderServices.verifyPayment(req.query.order_id as string);
 
 
   sendResponse(res, {
