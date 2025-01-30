@@ -8,7 +8,7 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = req.body;
     console.log(order);
-    const result = await OrderServices.createOrderInToDB(order);
+    const result = await OrderServices.createOrderInToDB(order, req.ip!);
     res.status(201).json({
       message: 'Order created successfully',
       status: true,
@@ -30,7 +30,25 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getUserOrders = catchAsync(async (req, res) => {
+const verifyPayment = catchAsync(async (req, res) => {
+  const orderId = req.query.order_id as string;
+  console.log("test ver",orderId);
+  const result = await OrderServices.verifyPayment(req.query.orderId as string);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order verified successfully',
+    data: result,
+  });;
+});
+
+
+
+
+
+
+const getUserOrders = catchAsync(async (req, res,) => {
   console.log("this is order controller", req.user.email);
   const email = req.user.email;
   const result = await OrderServices.getUserOrdersFromDB(email)
@@ -116,6 +134,7 @@ const getRevenueData = async (req: Request, res: Response,next:NextFunction) => 
 
 export const OrderControllers = {
   createOrder,
+  verifyPayment,
   getUserOrders,
   getAllOrders,
   getOrderById,

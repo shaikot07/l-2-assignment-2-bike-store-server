@@ -8,7 +8,16 @@ const orderSchema = new Schema({
     product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
     quantity: { type: Number, required: true, min: 1 },
     totalPrice: { type: Number, required: true },
-    status: { type: String, enum: ['pending' , 'completed' , 'cancelled', 'shipped' ,'delivered','canceled'], default: 'pending' },
+    status: { type: String, enum: ["Pending","Shipped" ,"Delivered", "Paid",  "Completed", "Cancelled"], default: 'Pending' },
+    transaction: {
+      id: String,
+      transactionStatus: String,
+      bank_status: String,
+      sp_code: String,
+      sp_message: String,
+      method: String,
+      date_time: String,
+    }
   },
   { timestamps: true }
 )

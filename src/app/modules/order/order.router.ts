@@ -16,7 +16,7 @@ router.get('/get-all-orders',OrderControllers.getAllOrders);
 router.get('/:id',OrderControllers.getOrderById);
 router.patch('/:orderId/status',auth(USER_ROLE.admin),OrderControllers.updateOrderStatus);
 router.get("/revenue",OrderControllers.getRevenueData)
-
+router.get('/verify-payment/:id', OrderControllers.verifyPayment)
 
 
 export const OrderRoutes= router;
