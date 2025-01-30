@@ -34,6 +34,8 @@ const verifyPayment = catchAsync(async (req, res) => {
   const orderId = req.query.order_id as string;
   console.log("test ver",orderId);
   const result = await OrderServices.verifyPayment(req.query.orderId as string);
+console.log("hellll");
+
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

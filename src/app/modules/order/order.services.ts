@@ -4,6 +4,7 @@ import { OrderModel } from './order.model';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { orderUtils } from './order.utils';
+import { IOrder } from './order.interface';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createOrderInToDB = async (orderData: any, client_ip: string) => {
@@ -51,15 +52,27 @@ const createOrderInToDB = async (orderData: any, client_ip: string) => {
 
   const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
 
+  // if (payment?.transactionStatus) {
+  //   order = await order.updateOne({
+  //     transaction: {
+  //       id: payment.sp_order_id,
+  //       transactionStatus: payment.transactionStatus,
+  //     },
+  //   });
+  // }
+  // Update the order with payment details if payment is successful
   if (payment?.transactionStatus) {
-    order = await order.updateOne({
-      transaction: {
-        id: payment.sp_order_id,
-        transactionStatus: payment.transactionStatus,
+    order = await OrderModel.findByIdAndUpdate(
+      order._id,
+      {
+        transaction: {
+          id: payment.sp_order_id,
+          transactionStatus: payment.transactionStatus,
+        },
       },
-    });
+      { new: true }
+    ) as mongoose.Document<unknown,  IOrder> & IOrder & { _id: mongoose.Types.ObjectId };
   }
-
   // return  payment.checkout_url;
   return { order, payment };
 };
