@@ -20,7 +20,7 @@ const moduleRoutes = [
     route: OrderRoutes,
   },
   {
-    path: '/admin',
+    path: '/users',
     route: userRoutes,
   },
 ];

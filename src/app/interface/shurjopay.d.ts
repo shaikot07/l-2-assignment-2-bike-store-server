@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 declare module 'shurjopay' {
   import { Logger } from 'winston';
 
@@ -99,6 +100,7 @@ declare module 'shurjopay' {
   }
 
   type Callback<T> = (response: T) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   type ErrorHandler = (error: any) => void;
 
   class Shurjopay {
@@ -109,11 +111,11 @@ declare module 'shurjopay' {
     constructor(): Shurjopay;
 
     config(
-      root_url: string,
-      merchant_username: string,
-      merchant_password: string,
-      merchant_key_prefix: string,
-      return_url: string,
+      // root_url: string,
+      // merchant_username: string,
+      // merchant_password: string,
+      // merchant_key_prefix: string,
+      // return_url: string,
     ): void;
 
     randomString(length: number): string;

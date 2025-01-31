@@ -145,8 +145,8 @@ const getOrderByIdFromDB = async (orderId: string) => {
 
 /**
  * Cancel an order (User can cancel only pending orders)
- * @param orderId - Order ID
- * @param email - User email
+  Order ID
+ - User email
  */
 const cancelOrderInDB = async (orderId: string, email: string) => {
   const order = await OrderModel.findOne({ _id: orderId, email });

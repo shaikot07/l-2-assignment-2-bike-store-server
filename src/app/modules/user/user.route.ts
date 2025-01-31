@@ -14,7 +14,8 @@ const router = express.Router();
 //   UserControllers.createStudent,
 // );
 // router.patch('/admin/users/:userId/block', auth('admin'),
-router.patch('/users/:userId/block',auth('admin'), userController.blockUser)
+router.get('/', userController.getAllUser)
+router.patch('/:userId/block', userController.blockUser)
 // router.delete('/blogs/:id', auth('admin'), BlogControllers.deleteBlogByAdmin);
 
 export const userRoutes = router;
