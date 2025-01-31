@@ -111,11 +111,11 @@ declare module 'shurjopay' {
     constructor(): Shurjopay;
 
     config(
-      // root_url: string,
-      // merchant_username: string,
-      // merchant_password: string,
-      // merchant_key_prefix: string,
-      // return_url: string,
+      root_url: string,
+      merchant_username: string,
+      merchant_password: string,
+      merchant_key_prefix: string,
+      return_url: string,
     ): void;
 
     randomString(length: number): string;
