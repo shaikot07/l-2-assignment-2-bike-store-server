@@ -8,26 +8,58 @@ class QueryBuilder<T> {
     this.query = query;
   }
 
-  // //   search method
-  search(searchableFields: string[]) {
-    // const searchTerm = this?.query?.searchTerm;
-    const searchTerm = this?.query?.search || this?.query?.searchTerm;
-    // console.log("thiss",this.query);
-    // console.log("search term:", searchTerm);
-    // console.log("searchable fields:", searchableFields);
-    if (searchTerm) {
-      this.modelQuery = this.modelQuery.find({
-        $or: searchableFields.map(
-          (field) =>
-            ({
-              [field]: { $regex: searchTerm, $options: 'i' },
-            }) as FilterQuery<T>,
-        ),
-      });
-    }
+  // //   search method make by mesbah vai
+//it not work  name+model ak sathe search korte pare na
 
+  // search(searchableFields: string[]) {
+  //   // const searchTerm = this?.query?.searchTerm;
+  //   const searchTerm = this?.query?.search || this?.query?.searchTerm;
+  //   // console.log("thiss",this.query);
+  //   // console.log("search term:", searchTerm);
+  //   // console.log("searchable fields:", searchableFields);
+  //   if (searchTerm) {
+  //     this.modelQuery = this.modelQuery.find({
+  //       $or: searchableFields.map(
+  //         (field) =>
+  //           ({
+  //             [field]: { $regex: searchTerm, $options: 'i' },
+  //           }) as FilterQuery<T>,
+  //       ),
+  //     });
+  //   }
+
+  //   return this;
+  // }
+
+  // test new  search method make by my and copilot 
+  // it work now name+model+brand+category+description etc
+  search(searchableFields: string[]) {
+    const searchTerm = (this?.query?.search as string) || (this?.query?.searchTerm as string);
+    
+    if (searchTerm) {
+      // Split the search term into individual words
+      const searchWords = searchTerm.split(/\s+/).map(word => word.trim()).filter(word => word.length > 0);
+  
+      if (searchWords.length > 0) {
+        this.modelQuery = this.modelQuery.find({
+            $or: searchableFields.map((field) => ({
+              [field]: { 
+                $regex: searchWords.join('|'),  // Join words with OR (|) operator in regex
+                $options: 'i' // Case insensitive
+              },
+            })) as unknown as FilterQuery<T>[]
+          } as FilterQuery<T>);
+      }
+    }
+  
     return this;
   }
+
+
+
+
+
+
 
  /*
  Developer note
@@ -140,7 +172,7 @@ class QueryBuilder<T> {
     const totalQueries = this.modelQuery.getFilter();
     const total = await this.modelQuery.model.countDocuments(totalQueries);
     const page = Number(this?.query?.page) || 1;
-    const limit = Number(this?.query?.limit) || 10;
+    const limit = Number(this?.query?.limit) || 20;
     const totalPage = Math.ceil(total / limit);
 
     return {

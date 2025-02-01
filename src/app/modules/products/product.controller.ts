@@ -52,7 +52,7 @@ const getAllProducts  = catchAsync(async (req: Request,res: Response, ) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'blog are retrieved successfully',
+    message: 'product are retrieved successfully',
     data: result,
   });
 });
