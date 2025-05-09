@@ -28,7 +28,40 @@ const getAllUser= catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updatedUserPersonalInfoById = catchAsync(async(req: Request, res: Response) => {
+  const userId = req.params.userId; 
+  console.log(userId ,'for updated user id');
+  const updatedUserData = req.body;
+
+  const updatedUser = await userServices.updatedUserPersonalInfoById(userId, updatedUserData);
+
+// Send successful response if user info updated successfully
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'User info updated successfully',
+      data:updatedUser,  // Ensure we return the correct ' (house)
+    });
+})
+
+const getsingleUserById= catchAsync(async (req: Request, res: Response) => {
+  const userId = req.params.userId; 
+ 
+  const result= await userServices.getUserById(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'single User retrieved successfully!',
+    data:result,
+  });
+});
+
+
+
 export const userController = {
   blockUser,
-  getAllUser
+  getAllUser,
+  updatedUserPersonalInfoById,
+  getsingleUserById
 };

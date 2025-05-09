@@ -100,7 +100,7 @@ class QueryBuilder<T> {
   
     // Fields to exclude from filtering
     const excludeFields = [
-      'search', 'sortBy', 'sortOrder', 'author', 'searchTerm', 'sort', 'limit', 'page', 'fields',
+      'search', 'sortBy', 'sortOrder', 'author','asc','desc', 'searchTerm', 'sort', 'limit', 'page', 'fields',
     ];
     excludeFields.forEach((el) => delete queryObj[el]);
   
@@ -140,19 +140,26 @@ class QueryBuilder<T> {
 
 
 
-  sort() {
-    const sortBy = (this.query.sortBy as string) || 'createdAt';
-    const sortOrder =
-      (this.query.sortOrder as string)?.toLowerCase() === 'asc' ? '' : '-';
-    this.modelQuery = this.modelQuery.sort(`${sortOrder}${sortBy}`);
-    return this;
-  }
+  // sort() {
+  //   const sortBy = (this.query.sortBy as string) || 'createdAt';
+  //   const sortOrder =
+  //     (this.query.sortOrder as string)?.toLowerCase() === 'asc' ? '' : '-';
+  //   this.modelQuery = this.modelQuery.sort(`${sortOrder}${sortBy}`);
+  //   return this;
+  // }
+// new code for sort method 
+sort() {
+  const sortDirection = (this.query.sort as string)?.toLowerCase() === 'desc' ? -1 : 1;
 
+  this.modelQuery = this.modelQuery.sort({ price: sortDirection });
+
+  return this;
+}
 
   //   pagination method
   paginate() {
     const page = Number(this?.query?.page) || 1;
-    const limit = Number(this?.query?.limit) || 20;
+    const limit = Number(this?.query?.limit) || 10;
     const skip = (page - 1) * limit;
 
     this.modelQuery = this.modelQuery.skip(skip).limit(limit);

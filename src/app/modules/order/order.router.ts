@@ -9,6 +9,8 @@ const router =express.Router()
 
 // api route here 
 router.get("/revenue",OrderControllers.getRevenueData)
+router.get("/order-history",OrderControllers.getOrderHistoryChartDataByAdmin)
+router.get('/chart/:email',OrderControllers.getOrderHistoryChartDataByUser);
 router.post('/create-order',OrderControllers.createOrder);
 router.delete('/:orderId',auth(USER_ROLE.customer),OrderControllers.cancelOrder);
 router.get('/get-user-order',auth(USER_ROLE.customer),OrderControllers.getUserOrders);

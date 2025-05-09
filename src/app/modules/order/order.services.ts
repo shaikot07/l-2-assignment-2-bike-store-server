@@ -213,8 +213,66 @@ const calculateRevenue = async () => {
 
 
 
+// -----------for chart --------------- 
+// this is for admin 
+const getOrderHistoryChartData = async () => {
+  const result = await OrderModel.aggregate([
+    {
+      $group: {
+        _id: {
+          date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          status: '$status',
+        },
+        totalOrders: { $sum: 1 },
+        totalRevenue: { $sum: '$totalPrice' },
+      },
+    },
+    {
+      $sort: {
+        '_id.date': 1,
+      },
+    },
+  ]);
 
+  return result.map(item => ({
+    date: item._id.date,
+    status: item._id.status,
+    totalOrders: item.totalOrders,
+    totalRevenue: item.totalRevenue,
+  }));
+};
 
+const getUserOrderHistoryChartData = async (email: string) => {
+  const result = await OrderModel.aggregate([
+    {
+      $match: {
+        email: email,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          status: '$status',
+        },
+        totalOrders: { $sum: 1 },
+        totalRevenue: { $sum: '$totalPrice' },
+      },
+    },
+    {
+      $sort: {
+        '_id.date': 1,
+      },
+    },
+  ]);
+
+  return result.map(item => ({
+    date: item._id.date,
+    status: item._id.status,
+    totalOrders: item.totalOrders,
+    totalRevenue: item.totalRevenue,
+  }));
+};
 
 
 
@@ -227,4 +285,6 @@ export const OrderServices = {
   cancelOrderInDB,
   updateOrderStatusInDB,
   calculateRevenue,
+  getOrderHistoryChartData,
+  getUserOrderHistoryChartData
 };

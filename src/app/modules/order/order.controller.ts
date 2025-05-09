@@ -134,6 +134,36 @@ const getRevenueData = async (req: Request, res: Response,next:NextFunction) => 
     next(error)
   }
 };
+const  getOrderHistoryChartDataByAdmin = async (req: Request, res: Response,next:NextFunction) => {
+  try {
+    const totalRevenue = await OrderServices.getOrderHistoryChartData();
+    
+    res.status(200).json({
+      message: 'revenue calculated successfully',
+      status: true,
+      data: { totalRevenue },
+    });
+  } catch (error) {
+    // res.status(500).json({ message: 'fail calculating revenue', status: false, error });
+    next(error)
+  }
+};
+ const getOrderHistoryChartDataByUser = async (req: Request,res: Response,next: NextFunction) => {
+  try {
+    // const userId = req.params.userId; // Or use req.user.id if authenticated
+  const email = req.params.email;
+    console.log(email ,'this is for get noiw chart data');
+    const chartData = await OrderServices.getUserOrderHistoryChartData(email as string);
+
+    res.status(200).json({
+      message: 'User order chart data fetched successfully',
+      status: true,
+      data: chartData,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const OrderControllers = {
   createOrder,
@@ -144,4 +174,6 @@ export const OrderControllers = {
   cancelOrder,
   updateOrderStatus,
   getRevenueData,
+  getOrderHistoryChartDataByAdmin,//ai data for chart
+   getOrderHistoryChartDataByUser, //ai data for user chart
 };
